@@ -1,19 +1,21 @@
+extern crate core;
+
 use rand::Rng;
 use std::cmp::Ordering;
 use plotters::prelude::*;
 
 
-fn sme(x:i32, arr:&Vec<i32>)->Vec<i32> {
+fn sme(x:i32, arr:&Vec<i32>)->Vec<f64> {
     let mut i=0;
     let len_arr= arr.len();
-    let mut avg_arr = vec![0;len_arr-(x as usize)];
-    let mut sum=0;
+    let mut avg_arr:Vec<f64> = vec![0.;len_arr-(x as usize)];
+    let mut sum=0.;
     while i<len_arr-(x as usize){
         for h in i..i+(x as usize){
-            sum=sum+arr[h];
+            sum+=arr[h] as f64;
         }
-    avg_arr[i]=sum/x;
-    sum=0;
+    avg_arr[i]=sum/x as f64;
+    sum=0.;
     i=i+1;
     }
     return avg_arr;
@@ -24,8 +26,8 @@ fn sme(x:i32, arr:&Vec<i32>)->Vec<i32> {
 
 
 fn main()-> Result<(), Box<dyn std::error::Error>>{
-    const MAX: usize =1000000000;
-    const STEP: usize = 100000;
+    const MAX: usize =10000000000;
+    const STEP: usize = 10000;
     let mut  array = vec![0; MAX/STEP];
     println!("Guess the number");
     let mut i=0;
@@ -77,14 +79,14 @@ fn main()-> Result<(), Box<dyn std::error::Error>>{
     ctx.configure_mesh().draw().unwrap();
 
     ctx.draw_series(
-        LineSeries::new((0..).step_by(STEP).zip(array.iter().map(|x|*x)), &GREEN)
-    );
+        LineSeries::new((0 ..).step_by(STEP ).zip(array.iter().map(|x|*x )), &GREEN)
+    ).unwrap();
     ctx.draw_series(
-            LineSeries::new((0..).step_by(STEP).zip(avg.iter().map(|x|*x)), &BLUE)
-    );
+            LineSeries::new((0 ..).step_by(STEP).zip(avg.iter().map(|x|*x)), &BLUE)
+    ).unwrap();
+
+
         Ok(())
-
-
 
 
 }
